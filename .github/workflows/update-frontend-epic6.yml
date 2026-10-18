@@ -1,0 +1,51 @@
+name: Update frontend epic6 Image
+
+on:
+  repository_dispatch:
+    types: [update-frontend-epic6]
+
+jobs:
+  update-frontend-epic6:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract payload data
+        id: extract
+        env:
+          IMAGE: ${{ github.event.client_payload.image }}
+        run: |
+          echo "New image: $IMAGE"
+          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+
+      - name: Update frontend epic6 deployment
+        env:
+          IMAGE: ${{ steps.extract.outputs.image }}
+        run: |
+          FILE="frontend/epic6/deployment.yml"
+
+          if [ ! -f "$FILE" ]; then
+            echo "Error: $FILE does not exist"
+            exit 1
+          fi
+
+          echo "Updating $FILE to use $IMAGE"
+          sed -i "s|image: .*|image: ${IMAGE}|" "$FILE"
+          grep "image:" "$FILE"
+
+      - name: Commit and push changes
+        env:
+          IMAGE: ${{ steps.extract.outputs.image }}
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add frontend/epic6/deployment.yml
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update frontend epic6 image to ${IMAGE}"
+            git push
+          fi
