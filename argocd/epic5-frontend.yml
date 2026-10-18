@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: umssy-epic5-frontend
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/UMSSY/umssy-app-deploy.git
+    targetRevision: main
+    path: frontend/epic5
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: umssy-epic5
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
