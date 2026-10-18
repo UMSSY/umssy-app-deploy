@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: umssy-frontend
+  namespace: umssy-main
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: umssy-frontend
+  template:
+    metadata:
+      labels:
+        app: umssy-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: ghcr.io/umssy/umssy-app-frontend:main-bootstrap
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: PORT
+          value: '3000'

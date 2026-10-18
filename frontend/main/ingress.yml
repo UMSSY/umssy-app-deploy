@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: umssy-frontend
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+  namespace: umssy-main
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: umssy.zer4c.dev
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: umssy-backend
+            port:
+              number: 8080
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: umssy-frontend
+            port:
+              number: 3000
