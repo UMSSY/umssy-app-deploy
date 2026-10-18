@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: umssy-frontend
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+  namespace: umssy-epic6
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: epic6-umssy.zer4c.dev
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: umssy-frontend
+            port:
+              number: 3000
