@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: umssy-backend
+  namespace: umssy-develop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: umssy-backend
+  template:
+    metadata:
+      labels:
+        app: umssy-backend
+    spec:
+      containers:
+      - name: backend
+        image: ghcr.io/umssy/umssy-app-backend:develop-bootstrap
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - secretRef:
+            name: umssy-db
+        - secretRef:
+            name: umssy-backend
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: PORT
+          value: '8080'
+        - name: DB_HOST
+          value: postgres
+        - name: DB_PORT
+          value: '5432'
+        - name: DB_SCHEMA
+          value: public
+        - name: CORS_ORIGIN
+          value: https://dev-umssy.zer4c.dev
+        - name: JWT_EXPIRES_IN
+          value: 8h
+        - name: JWT_ALGORITHM
+          value: HS256
+  strategy:
+    type: Recreate
