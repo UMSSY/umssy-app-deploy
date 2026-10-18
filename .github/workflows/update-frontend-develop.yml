@@ -12,6 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: main
+          fetch-depth: 0
           token: ${{ secrets.DEPLOY_PUSH_TOKEN }}
 
       - name: Extract payload data
@@ -49,5 +51,24 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "Update frontend develop image to ${IMAGE}"
-            git push
+            for attempt in 1 2 3 4 5; do
+              git fetch origin main
+              if ! git rebase origin/main; then
+                git rebase --abort
+                echo "::error::Deployment update conflicts with changes on main."
+                exit 1
+              fi
+
+              if git push origin HEAD:main; then
+                break
+              fi
+
+              if [ "$attempt" -eq 5 ]; then
+                echo "::error::Could not push deployment update after 5 attempts."
+                exit 1
+              fi
+
+              echo "Push failed; refreshing main before retry $((attempt + 1))."
+              sleep "$attempt"
+            done
           fi
