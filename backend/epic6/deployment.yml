@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: ghcr.io/umssy/umssy-app-backend:epic6-1cf7d3a976df0cc02ffe597ea84c49eb282323ab
+        image: ghcr.io/umssy/umssy-app-backend:epic6-da499bb6e5329ade6397d6a2120720594a55ce44
         ports:
         - containerPort: 8080
         envFrom:
