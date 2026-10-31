@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: ghcr.io/umssy/umssy-app-backend:develop-332999b5e2218ca7035cb25a66b36e83687794b3
+        image: ghcr.io/umssy/umssy-app-backend:develop-f2599623974b6e33c9d965d565bd17c2e4112995
         ports:
         - containerPort: 8080
         envFrom:
