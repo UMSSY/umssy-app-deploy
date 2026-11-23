@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: ghcr.io/umssy/umssy-app-frontend:epic5-8f0ea4ba4c3bcf5467368336ddd6babb39334676
+        image: ghcr.io/umssy/umssy-app-frontend:epic5-cda99dd8f354877998ec6b5cc431f905766ce29f
         ports:
         - containerPort: 3000
         env:
